@@ -5,11 +5,14 @@
     <style>
         body {
             font-family: Helvetica, Arial, sans-serif;
-            font-size: 50px;
+            /* Relative to window size */
+            font-size: 4vw;
             color: rgb(105, 105, 105);
             display: flex;
-            justify-content: center;
-            align-items: center;
+            /* Align text to the top left */
+            justify-content: flex-start;
+            /* Align text to the top left */
+            align-items: flex-start;
             height: 100vh;
             margin: 0;
         }
@@ -17,9 +20,14 @@
         .cursor {
             display: none;
             width: 2px;
-            height: 1.2em;
+            height: 0.9em;
             background-color: black;
             animation: cursor-blink 1s infinite;
+        }
+
+        .textOutput {
+            word-break: break-word;
+            margin: 5vw;
         }
 
         @keyframes cursor-blink {
@@ -40,6 +48,16 @@
         document.addEventListener("keydown", showCursor);
         document.addEventListener("mousedown", showCursor);
 
+        var inactivityTimer;
+        function resetTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(function () {
+                document.querySelector(".cursor").style.display = "none";
+                document.addEventListener("keydown", showCursor);
+                document.addEventListener("mousedown", showCursor);
+            }, 5000);
+        }
+
         function showCursor() {
             var cursor = document.querySelector(".cursor");
             cursor.style.display = "inline-block";
@@ -51,8 +69,10 @@
             // Focus on an input element to show the keyboard for mobile users
             var inputElement = document.querySelector("input");
             inputElement.focus();
-        }
 
+            // Hide the cursor after 5 seconds of inactivity
+            resetTimer();
+        }
 
         function deleteText() {
             var cursor = document.querySelector(".cursor");
@@ -87,13 +107,15 @@
                     }
                     break;
             }
+            //Refresh inactivity timer
+            resetTimer();
         }
     </script>
 </head>
 
 <body>
-    <div>
-        <input style="opacity: 0; position: absolute; top: -9999px;">
+    <div class="textOutput">
+        <input style="position: absolute; top: -9999px;">
         <span class="cursor"></span>
     </div>
 </body>
