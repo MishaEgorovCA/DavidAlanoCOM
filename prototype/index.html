@@ -22,7 +22,7 @@
             width: 2px;
             height: 0.9em;
             background-color: black;
-            animation: cursor-blink 1s infinite;
+            animation: none;
         }
 
         .textOutput {
@@ -32,15 +32,15 @@
 
         @keyframes cursor-blink {
             0% {
-                opacity: 1;
-            }
-
-            50% {
                 opacity: 0;
             }
 
-            100% {
+            50% {
                 opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
             }
         }
     </style>
@@ -52,7 +52,9 @@
         function resetTimer() {
             clearTimeout(inactivityTimer);
             inactivityTimer = setTimeout(function () {
-                document.querySelector(".cursor").style.display = "none";
+                var cursor = document.querySelector(".cursor");
+                cursor.style.display = "none";
+                cursor.style.animation = "none";
                 document.addEventListener("keydown", showCursor);
                 document.addEventListener("mousedown", showCursor);
             }, 5000);
@@ -61,6 +63,7 @@
         function showCursor() {
             var cursor = document.querySelector(".cursor");
             cursor.style.display = "inline-block";
+            cursor.style.animation = "cursor-blink 1s infinite";
             document.addEventListener("keydown", typeText);
             //remove event listeners
             document.removeEventListener("keydown", showCursor);
