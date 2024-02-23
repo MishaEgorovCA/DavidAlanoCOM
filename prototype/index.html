@@ -6,7 +6,7 @@
         body {
             font-family: Helvetica, Arial, sans-serif;
             /* Relative to window size */
-            font-size: 4vw;
+            font-size: 6vw;
             color: rgb(105, 105, 105);
             display: flex;
             /* Align text to the top left */
@@ -27,7 +27,7 @@
 
         .textOutput {
             word-break: break-word;
-            margin: 5vw;
+            margin: 12vw;
         }
 
         @keyframes cursor-blink {
@@ -47,11 +47,6 @@
     <script>
         document.addEventListener("keydown", showCursor);
         document.addEventListener("mousedown", showCursor);
-
-        //Bring up keyboard on mobile
-        document.addEventListener("mousedown", function () {
-            document.querySelector("input").focus();
-        });
 
         var inactivityTimer;
         function resetTimer() {
@@ -120,7 +115,7 @@
 
 <body>
     <div class="textOutput">
-        <input style="position: absolute; top: -9999px;">
+        <input style="position: absolute; top: 0; left: 0; width: 99%; height: 99%; opacity: 0;">
         <span class="cursor"></span>
     </div>
 </body>
