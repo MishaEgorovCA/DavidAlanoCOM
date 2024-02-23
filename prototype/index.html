@@ -122,7 +122,7 @@
                     break;
                 default:
                     //Make sure it is a text key not a control key (SHIFT ALT etc)
-                    if (event.key.length === 1) {
+                    if (true || event.key.length === 1) {
                         insertText(event.key);
                         //delete text in text area
                         var txt = document.getElementById("txt");
