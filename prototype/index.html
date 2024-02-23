@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 50px;
+            color: rgb(105, 105, 105);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .cursor {
+            display: none;
+            width: 2px;
+            height: 1.2em;
+            background-color: black;
+            animation: cursor-blink 1s infinite;
+        }
+
+        @keyframes cursor-blink {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener("keydown", showCursor);
+        document.addEventListener("mousedown", showCursor);
+
+        function showCursor() {
+            var cursor = document.querySelector(".cursor");
+            cursor.style.display = "inline-block";
+            document.addEventListener("keydown", typeText);
+            //remove event listeners
+            document.removeEventListener("keydown", showCursor);
+            document.removeEventListener("mousedown", showCursor);
+        }
+
+        function typeText(event) {
+            if (event.key === "Backspace") {
+                event.preventDefault();
+                var cursor = document.querySelector(".cursor");
+                var previousSibling = cursor.previousSibling;
+                while (previousSibling) {
+                    cursor.parentNode.removeChild(previousSibling);
+                    previousSibling = cursor.previousSibling;
+                }
+            } else {
+                var cursor = document.querySelector(".cursor");
+                var text = document.createTextNode(event.key);
+                cursor.parentNode.insertBefore(text, cursor);
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div>
+        <span class="cursor"></span>
+    </div>
+</body>
+
+</html>
