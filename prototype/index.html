@@ -64,6 +64,10 @@
         document.addEventListener("keydown", showCursor);
         document.addEventListener("mousedown", showCursor);
 
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
         var inactivityTimer;
         function resetTimer() {
             clearTimeout(inactivityTimer);
@@ -82,7 +86,6 @@
             cursor.style.display = "inline-block";
             cursor.style.animation = "cursor-blink 1s infinite";
             //document.addEventListener("keydown", typeText);
-            document.getElementById("txt").addEventListener("keydown", typeText);
             //remove event listeners
             document.removeEventListener("keydown", showCursor);
             document.removeEventListener("mousedown", showCursor);
@@ -136,7 +139,7 @@
 <body>
     <div class="textOutput">
         <span class="cursor"></span>
-        <textarea id="txt"></textarea>
+        <textarea id="txt" onkeydown="typeText(event)"></textarea>
     </div>
 </body>
 
