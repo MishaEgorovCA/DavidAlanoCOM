@@ -63,6 +63,7 @@
     <script>
         document.addEventListener("keydown", showCursor);
         document.addEventListener("mousedown", showCursor);
+        //doocument.addEventListener("input", typeText);
 
         function isMobileDevice() {
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -85,7 +86,7 @@
             var cursor = document.querySelector(".cursor");
             cursor.style.display = "inline-block";
             cursor.style.animation = "cursor-blink 1s infinite";
-            //document.addEventListener("keydown", typeText);
+            document.addEventListener("keydown", handleControl);
             //remove event listeners
             document.removeEventListener("keydown", showCursor);
             document.removeEventListener("mousedown", showCursor);
@@ -110,7 +111,7 @@
             cursor.parentNode.insertBefore(textNode, cursor);
         }
 
-        function typeText(event) {
+        function handleControl(event) {
             switch (event.key) {
                 case "Backspace":
                     event.preventDefault();
@@ -121,25 +122,30 @@
                     insertText("Sent!");
                     break;
                 default:
-                    //Make sure it is a text key not a control key (SHIFT ALT etc)
-                    if (true || event.key.length === 1) {
-                        insertText(event.key);
-                        //delete text in text area
-                        var txt = document.getElementById("txt");
-                        txt.value = "";
-                    }
                     break;
+
             }
             //Refresh inactivity timer
             resetTimer();
         }
+
+        function typeText(event) {
+            //Make sure it is a text key not a control key (SHIFT ALT etc)
+            if (true || event.data.length === 1) {
+                insertText(event.data);
+                //delete text in text area
+                var txt = document.getElementById("txt");
+                txt.value = "";
+            }
+        }
+
     </script>
 </head>
 
 <body>
     <div class="textOutput">
         <span class="cursor"></span>
-        <textarea id="txt" onkeydown="typeText(event)"></textarea>
+        <textarea id="txt" oninput="typeText(event)"></textarea>
     </div>
 </body>
 
