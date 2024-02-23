@@ -47,21 +47,45 @@
             //remove event listeners
             document.removeEventListener("keydown", showCursor);
             document.removeEventListener("mousedown", showCursor);
+
+            // Focus on an input element to show the keyboard for mobile users
+            var inputElement = document.querySelector("input");
+            inputElement.focus();
+        }
+
+
+        function deleteText() {
+            var cursor = document.querySelector(".cursor");
+            var previousSibling = cursor.previousSibling;
+            //Delete all the text up until the cursor
+            while (previousSibling) {
+                cursor.parentNode.removeChild(previousSibling);
+                previousSibling = cursor.previousSibling;
+            }
+        }
+
+        function insertText(text) {
+            var cursor = document.querySelector(".cursor");
+            var textNode = document.createTextNode(text);
+            cursor.parentNode.insertBefore(textNode, cursor);
         }
 
         function typeText(event) {
-            if (event.key === "Backspace") {
-                event.preventDefault();
-                var cursor = document.querySelector(".cursor");
-                var previousSibling = cursor.previousSibling;
-                while (previousSibling) {
-                    cursor.parentNode.removeChild(previousSibling);
-                    previousSibling = cursor.previousSibling;
-                }
-            } else {
-                var cursor = document.querySelector(".cursor");
-                var text = document.createTextNode(event.key);
-                cursor.parentNode.insertBefore(text, cursor);
+            switch (event.key) {
+                case "Backspace":
+                    event.preventDefault();
+                    deleteText();
+                    break;
+                case "Enter":
+                    deleteText();
+                    insertText("Sent!");
+                    break;
+                default:
+                    //Make sure it is a text key not a control key (SHIFT ALT etc)
+                    if (event.key.length === 1) {
+                        insertText(event.key);
+                    }
+                    break;
             }
         }
     </script>
@@ -69,6 +93,7 @@
 
 <body>
     <div>
+        <input style="opacity: 0; position: absolute; top: -9999px;">
         <span class="cursor"></span>
     </div>
 </body>
