@@ -22,7 +22,7 @@
             justify-content: flex-start;
             /* Align text to the top left */
             align-items: flex-start;
-            height: 100vh;
+            /* height: 100vh; */
             margin: 0;
         }
 
@@ -30,19 +30,18 @@
             /*inherit font and alignements from textOutput*/
             font-family: inherit;
             font-size: inherit;
-            color: inherit;
             padding: inherit;
+            margin: 0;
             justify-content: inherit;
             align-items: inherit;
-            border: none;
             background-color: transparent;
             outline: none;
 
             position: absolute;
             top: 0;
             left: 0;
-            width: calc(100% - 24vw);
-            height: calc(100% - 24vw);
+            width: calc(99% - 24vw);
+            height: calc(99% - 24vw);
             padding: 12vw;
             opacity: 0;
         }
@@ -82,7 +81,8 @@
             var cursor = document.querySelector(".cursor");
             cursor.style.display = "inline-block";
             cursor.style.animation = "cursor-blink 1s infinite";
-            document.addEventListener("keydown", typeText);
+            //document.addEventListener("keydown", typeText);
+            document.getElementById("txt").addEventListener("keydown", typeText);
             //remove event listeners
             document.removeEventListener("keydown", showCursor);
             document.removeEventListener("mousedown", showCursor);
@@ -121,6 +121,9 @@
                     //Make sure it is a text key not a control key (SHIFT ALT etc)
                     if (event.key.length === 1) {
                         insertText(event.key);
+                        //delete text in text area
+                        var txt = document.getElementById("txt");
+                        txt.value = "";
                     }
                     break;
             }
@@ -132,8 +135,8 @@
 
 <body>
     <div class="textOutput">
-        <textarea></textarea>
         <span class="cursor"></span>
+        <textarea id="txt"></textarea>
     </div>
 </body>
 
