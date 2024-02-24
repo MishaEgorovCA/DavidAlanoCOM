@@ -63,7 +63,6 @@
     <script>
         document.addEventListener("keydown", showCursor);
         document.addEventListener("mousedown", showCursor);
-        //doocument.addEventListener("input", typeText);
 
         function isMobileDevice() {
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -122,6 +121,7 @@
                     insertText("Sent!");
                     break;
                 default:
+                    typeText(event);
                     break;
 
             }
@@ -129,13 +129,20 @@
             resetTimer();
         }
 
+        function mobileType(event) {
+            if (isMobileDevice()) {
+                typeText(event);
+            }
+        }
+
         function typeText(event) {
             //Make sure it is a text key not a control key (SHIFT ALT etc)
-            if (true || event.data.length === 1) {
-                insertText(event.data);
+            var key = event.data || event.key;
+            if (key.length === 1) {
+                insertText(key);
                 //delete text in text area
                 var txt = document.getElementById("txt");
-                txt.value = "";
+                txt.value = "-";
             }
         }
 
@@ -145,7 +152,7 @@
 <body>
     <div class="textOutput">
         <span class="cursor"></span>
-        <textarea id="txt" oninput="typeText(event)"></textarea>
+        <textarea id="txt" oninput="mobileType(event)"></textarea>
     </div>
 </body>
 
