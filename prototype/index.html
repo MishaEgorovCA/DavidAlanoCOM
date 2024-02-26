@@ -63,11 +63,6 @@
     <script>
         document.addEventListener("keydown", showCursor);
         document.addEventListener("mousedown", showCursor);
-        
-        var preferTextBoxInput = false;
-        function isMobileDevice() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        }
 
         var inactivityTimer;
         function resetTimer() {
@@ -122,11 +117,7 @@
                     insertText("Sent!");
                     break;
                 default:
-                    //Compatibility check
-                    if (event.key.toLower() === "undefined" || event.key.toLower() === "unidentified") {
-                        preferTextBoxInput = true;
-                    }
-                    if (!preferTextBoxInput)
+                    if (!compatibilityCheck(event))
                         typeText(event);
                     break;
 
@@ -136,11 +127,7 @@
         }
 
         function mobileType(event) {
-            //Compatibility check
-            if (event.data.toLower() === "undefined" || event.data.toLower() === "unidentified") {
-                preferTextBoxInput = false;
-            }
-            if (preferTextBoxInput) {
+            if (compatibilityCheck(event)) {
                 typeText(event);
             }
         }
@@ -160,8 +147,16 @@
             }
         }
 
+        var keydownDetected = false;
         function compatibilityCheck(event){
-            
+            if (event.key){
+                var input = event.key;
+                if (input.length === 1){
+                    keydownDetected = true;
+                }
+            }
+            //return true when keydown incompatible
+            return !keydownDetected;
         }
 
     </script>
