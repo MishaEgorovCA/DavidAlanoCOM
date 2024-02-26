@@ -134,12 +134,11 @@
                 case "Backspace":
                     event.preventDefault();
                     //TODO: message deleted message
-                    deleteText();
+                    displayText("your message has been deleted.");
                     break;
                 case "Enter":
                     //STUB FOR SENDING
-                    deleteText();
-                    insertText("Sent!");
+                    displayText("message sent. (not really atm)");
                     break;
                 default:
                     if (!compatibilityCheck(event))
@@ -151,8 +150,9 @@
             resetTimer();
         }
 
+        var blocked = false;
         function mobileType(event) {
-            if (compatibilityCheck(event)) {
+            if (compatibilityCheck(event) && !blocked) {
                 typeText(event);
             }
         }
@@ -187,22 +187,21 @@
         function displayText(text) {
             document.removeEventListener("keydown", showCursor);
             document.removeEventListener("mousedown", showCursor);
-
+            blocked = true;
+            document.querySelector("textarea").blur();
             document.removeEventListener("keydown", handleControl);
-            //remove text area oninput event listener
-            var txt = document.getElementById("txt");
-            txt.oninput = null;
+            var cursor = document.querySelector(".cursor");
+            cursor.style.display = "none";
+            cursor.style.animation = "none";
+
+            deleteText();
+            insertText(text);
 
             setTimeout(function () {
-                var cursor = document.querySelector(".cursor");
-                cursor.style.display = "none";
-                cursor.style.animation = "none";
-                document.querySelector("textarea").blur();
                 document.addEventListener("keydown", showCursor);
                 document.addEventListener("mousedown", showCursor);
-                //add text area oninput event listener
-                txt.oninput = mobileType;
-                document.addEventListener("keydown", handleControl);
+                blocked = false;
+                deleteText();
             }, 1500);
         }
 
