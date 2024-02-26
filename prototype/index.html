@@ -106,6 +106,7 @@
             resetTimer();
         }
 
+        var message = "";
         function deleteText() {
             var cursor = document.querySelector(".cursor");
             var previousSibling = cursor.previousSibling;
@@ -114,13 +115,16 @@
                 cursor.parentNode.removeChild(previousSibling);
                 previousSibling = cursor.previousSibling;
             }
+            message = "";
         }
 
         function insertText(text) {
+            text = text.toLowerCase();
             var cursor = document.querySelector(".cursor");
-            var textNode = document.createTextNode(text.toLowerCase());
+            var textNode = document.createTextNode(text);
             var span = document.createElement("span");
             span.appendChild(textNode);
+            message += text;
             span.classList.add("fade-in");
             cursor.parentNode.insertBefore(span, cursor);
         }
@@ -129,9 +133,11 @@
             switch (event.key) {
                 case "Backspace":
                     event.preventDefault();
+                    //TODO: message deleted message
                     deleteText();
                     break;
                 case "Enter":
+                    //STUB FOR SENDING
                     deleteText();
                     insertText("Sent!");
                     break;
@@ -176,6 +182,28 @@
             }
             //return true when keydown incompatible
             return !keydownDetected;
+        }
+
+        function displayText(text) {
+            document.removeEventListener("keydown", showCursor);
+            document.removeEventListener("mousedown", showCursor);
+
+            document.removeEventListener("keydown", handleControl);
+            //remove text area oninput event listener
+            var txt = document.getElementById("txt");
+            txt.oninput = null;
+
+            setTimeout(function () {
+                var cursor = document.querySelector(".cursor");
+                cursor.style.display = "none";
+                cursor.style.animation = "none";
+                document.querySelector("textarea").blur();
+                document.addEventListener("keydown", showCursor);
+                document.addEventListener("mousedown", showCursor);
+                //add text area oninput event listener
+                txt.oninput = mobileType;
+                document.addEventListener("keydown", handleControl);
+            }, 1500);
         }
 
     </script>
