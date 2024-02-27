@@ -20,23 +20,54 @@
             margin: 0;
         }
 
+        h1 {
+            font-weight: normal;
+        }
+
         .message-container {
             margin-left: 1em;
         }
 
         .message-block {
             margin-bottom: 1em;
-            margin-left: 1em;
+            margin-left: 2em;
+        }
+
+        .deleted {
+            color: #b9b9b9;
         }
 
         .date {
-            font-weight: bold;
             margin-bottom: 0.5em;
         }
 
         .info {
             margin-bottom: 0.2em;
             font-size: 0.5vw;
+        }
+
+        .date-container {
+            margin-bottom: 1em;
+            cursor: pointer;
+        }
+
+        .date-container.collapsed .message-block {
+            display: none;
+        }
+
+        .date-container .date {
+            display: flex;
+            align-items: center;
+        }
+
+        .date-container .date::before {
+            content: "+";
+            margin-right: 0.5em;
+            transition: transform 0.2s;
+        }
+
+        .date-container.collapsed .date::before {
+            transform: rotate(45deg);
         }
     </style>
 </head>
@@ -102,11 +133,21 @@
             });
 
             // Render messages by date
+            var first = true;
             Object.entries(groupedMessages).forEach(([date, messages]) => {
+                const dateContainer = document.createElement('div');
+                dateContainer.classList.add('date-container');
+                messagesContainer.appendChild(dateContainer);
+                if (first) {
+                    first = false;
+                } else {
+                    dateContainer.classList.toggle('collapsed');
+                }
+
                 const dateElement = document.createElement('div');
                 dateElement.classList.add('date');
                 dateElement.textContent = date.toLowerCase();
-                messagesContainer.appendChild(dateElement);
+                dateContainer.appendChild(dateElement);
 
                 messages.forEach(message => {
                     const messageBlock = document.createElement('div');
@@ -119,7 +160,25 @@
                     const messageElement = document.createElement('div');
                     messageElement.textContent = message.data.replace(/\s/g, '') == "" ? "[empty message]" : message.data;
                     messageBlock.appendChild(messageElement);
-                    messagesContainer.appendChild(messageBlock);
+                    dateContainer.appendChild(messageBlock);
+
+                    if (message.deleted) {
+                        messageElement.classList.add('deleted');
+                        // Make message hidden but show on click
+                        messageElement.style.display = 'none';
+                        infoElement.addEventListener('click', () => {
+                            if (messageElement.style.display === 'none') {
+                                messageElement.style.display = 'block';
+                            } else {
+                                messageElement.style.display = 'none';
+                            }
+                        });
+                    }
+                });
+
+                // Add click event listener to toggle collapse
+                dateElement.addEventListener('click', () => {
+                    dateContainer.classList.toggle('collapsed');
                 });
             });
         }
