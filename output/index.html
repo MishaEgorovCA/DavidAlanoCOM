@@ -2,65 +2,142 @@
 <html>
 
 <head>
-    <title>Message Responses</title>
+    <title>messages</title>
     <style>
-        .message-container {
-            display: flex;
-            flex-direction: column;
+        body {
+            letter-spacing: 0.07em;
+            word-break: break-word;
+            padding: 6vw;
+            font-family: Helvetica, Arial, sans-serif;
+            /* Relative to window size */
+            font-size: 1vw;
+            color: #686868;
+            /* Align text to the top left */
+            justify-content: flex-start;
+            /* Align text to the top left */
             align-items: flex-start;
-            padding: 20px;
+            /* height: 100vh; */
+            margin: 0;
         }
 
-        .message-bubble {
-            background-color: #f1f1f1;
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 10px;
-            max-width: 70%;
-            align-self: flex-end;
-            background-color: #007bff;
-            color: #fff;
+        .message-container {
+            margin-left: 1em;
         }
 
-        .message-info {
-            font-size: 12px;
-            color: #999;
-            margin-bottom: 5px;
-            align-self: flex-end;
+        .message-block {
+            margin-bottom: 1em;
+            margin-left: 1em;
+        }
+
+        .date {
+            font-weight: bold;
+            margin-bottom: 0.5em;
+        }
+
+        .info {
+            margin-bottom: 0.2em;
+            font-size: 0.5vw;
         }
     </style>
 </head>
 
 <body>
-    <div class="message-container">
+    <h1>messages</h1>
 
-        <div class="message-info">
-            From: 172.145.233.12
-            <br>
-            Time: 10:00 AM
-        </div>
-        <div class="message-bubble">
-            Hello!
-        </div>
-        <div class="message-info">
-            From: 125.145.233.12
-            <br>
-            Time: 11:30 AM
-        </div>
-        <div class="message-bubble">
-            This is a cool website!
-        </div>
-        <div class="message-info">
-            From: 102.145.233.12
-            <br>
-            Time: 12:45 PM
-        </div>
-        <div class="message-bubble">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc a aliquet tincidunt, nisl nunc
-            lacinia nunc, non aliquet nunc nunc ac nunc. Sed euismod, nunc a aliquet tincidunt, nisl nunc lacinia nunc,
-            non aliquet nunc nunc ac nunc. Sed euismod, nunc a aliquet tincidunt, nisl nunc lacinia nunc, non aliquet
-            nunc nunc ac nunc. Sed euismod, nunc a aliquet tincidunt, nisl nunc lacinia nunc, non aliquet nunc nunc ac
-            nunc.
-        </div>
-    </div>
+    <div id="messages" class="message-container"></div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZsVjv92RBNBhpC8CR5487DAVOs8RR-D0",
+            authDomain: "davidalanocom.firebaseapp.com",
+            projectId: "davidalanocom",
+            storageBucket: "davidalanocom.appspot.com",
+            messagingSenderId: "2820834762",
+            appId: "1:2820834762:web:16944cf2e5cf8876263b33"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        var db = collection(getFirestore(app), "messages");
+
+        // Function to format the timestamp to a readable date
+        function formatDate(timestamp) {
+            const date = timestamp.toDate();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString(undefined, options);
+        }
+
+        // Function to format the timestamp to a readable time
+        function formatTime(timestamp) {
+            const date = timestamp.toDate();
+            const options = { hour: 'numeric', minute: 'numeric' };
+            return date.toLocaleTimeString(undefined, options);
+        }
+
+        // Function to render the messages
+        function renderMessages(messages) {
+            const messagesContainer = document.getElementById('messages');
+
+            // Clear previous messages
+            messagesContainer.innerHTML = '';
+
+            // Sort messages by timestamp
+            messages.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
+
+            // Group messages by date
+            const groupedMessages = {};
+            messages.forEach(message => {
+                const date = formatDate(message.timestamp);
+                if (!groupedMessages[date]) {
+                    groupedMessages[date] = [];
+                }
+                groupedMessages[date].push(message);
+            });
+
+            // Render messages by date
+            Object.entries(groupedMessages).forEach(([date, messages]) => {
+                const dateElement = document.createElement('div');
+                dateElement.classList.add('date');
+                dateElement.textContent = date.toLowerCase();
+                messagesContainer.appendChild(dateElement);
+
+                messages.forEach(message => {
+                    const messageBlock = document.createElement('div');
+                    messageBlock.classList.add('message-block');
+                    const infoElement = document.createElement('div');
+                    infoElement.classList.add('info');
+                    infoElement.textContent = formatTime(message.timestamp) + (message.deleted ? "  ~deleted message~" : "");
+                    messageBlock.appendChild(infoElement);
+
+                    const messageElement = document.createElement('div');
+                    messageElement.textContent = message.data;
+                    messageBlock.appendChild(messageElement);
+                    messagesContainer.appendChild(messageBlock);
+                });
+            });
+        }
+
+        // Fetch messages from Firebase
+        getDocs(db).then(querySnapshot => {
+            const messages = [];
+            querySnapshot.forEach(doc => {
+                const message = {
+                    data: doc.data().data,
+                    timestamp: doc.data().timestamp,
+                    deleted: doc.data().deleted
+                };
+                messages.push(message);
+            });
+            renderMessages(messages);
+        });
+    </script>
 </body>
+
+</html>
