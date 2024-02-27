@@ -1,0 +1,73 @@
+.cursor {
+    display: none;
+    width: 2px;
+    height: 0.9em;
+    background-color: #171717;
+    animation: none;
+}
+
+.textOutput {
+    letter-spacing: 0.07em;
+    word-break: break-word;
+    padding: 12vw;
+    font-family: Helvetica, Arial, sans-serif;
+    /* Relative to window size */
+    font-size: 6vw;
+    color: #e9e9e9;
+    /* Align text to the top left */
+    justify-content: flex-start;
+    /* Align text to the top left */
+    align-items: flex-start;
+    /* height: 100vh; */
+    margin: 0;
+}
+
+.fade-in {
+    animation: text-fade 1s forwards;
+}
+
+textarea {
+    /*inherit font and alignements from textOutput*/
+    font-family: inherit;
+    font-size: inherit;
+    padding: inherit;
+    margin: 0;
+    justify-content: inherit;
+    align-items: inherit;
+    background-color: transparent;
+    outline: none;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(99% - 24vw);
+    height: calc(99% - 24vw);
+    padding: 12vw;
+    opacity: 0;
+}
+
+
+
+@keyframes cursor-blink {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes text-fade {
+    0% {
+        color: #171717;
+    }
+
+    100% {
+        color: #e9e9e9;
+    }
+}
