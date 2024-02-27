@@ -12,7 +12,7 @@
         }
 
         .textOutput {
-            letter-spacing: 0.07em; 
+            letter-spacing: 0.07em;
             word-break: break-word;
             padding: 12vw;
             font-family: Helvetica, Arial, sans-serif;
@@ -51,7 +51,7 @@
             opacity: 0;
         }
 
-        
+
 
         @keyframes cursor-blink {
             0% {
@@ -66,6 +66,7 @@
                 opacity: 0;
             }
         }
+
         @keyframes text-fade {
             0% {
                 color: #171717;
@@ -76,9 +77,30 @@
             }
         }
     </style>
-    <script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZsVjv92RBNBhpC8CR5487DAVOs8RR-D0",
+            authDomain: "davidalanocom.firebaseapp.com",
+            projectId: "davidalanocom",
+            storageBucket: "davidalanocom.appspot.com",
+            messagingSenderId: "2820834762",
+            appId: "1:2820834762:web:16944cf2e5cf8876263b33"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        var messagesDB = collection(getFirestore(app), "messages");
+
         document.addEventListener("keydown", showCursor);
         document.addEventListener("mousedown", showCursor);
+        document.getElementById("txt").addEventListener("input", mobileType);
 
         var inactivityTimer;
         function resetTimer() {
@@ -134,11 +156,13 @@
                 case "Backspace":
                     event.preventDefault();
                     //TODO: message deleted message
+                    addDoc(messagesDB, { data: message, timestamp: new Date(), deleted: true });
                     displayText("your message has been deleted.");
                     break;
                 case "Enter":
                     //STUB FOR SENDING
-                    displayText("message sent. (not really atm)");
+                    addDoc(messagesDB, { data: message, timestamp: new Date(), deleted: false });
+                    displayText("message sent.");
                     break;
                 default:
                     if (!compatibilityCheck(event))
@@ -150,9 +174,8 @@
             resetTimer();
         }
 
-        var blocked = false;
         function mobileType(event) {
-            if (compatibilityCheck(event) && !blocked) {
+            if (compatibilityCheck(event)) {
                 typeText(event);
             }
         }
@@ -173,10 +196,10 @@
         }
 
         var keydownDetected = false;
-        function compatibilityCheck(event){
-            if (event.key){
+        function compatibilityCheck(event) {
+            if (event.key) {
                 var input = event.key;
-                if (input.length === 1){
+                if (input.length === 1) {
                     keydownDetected = true;
                 }
             }
@@ -187,7 +210,7 @@
         function displayText(text) {
             document.removeEventListener("keydown", showCursor);
             document.removeEventListener("mousedown", showCursor);
-            blocked = true;
+            document.getElementById("txt").removeEventListener("input", mobileType);
             document.querySelector("textarea").blur();
             document.removeEventListener("keydown", handleControl);
             var cursor = document.querySelector(".cursor");
@@ -200,7 +223,7 @@
             setTimeout(function () {
                 document.addEventListener("keydown", showCursor);
                 document.addEventListener("mousedown", showCursor);
-                blocked = false;
+                document.getElementById("txt").addEventListener("input", mobileType);
                 deleteText();
             }, 1500);
         }
@@ -211,7 +234,7 @@
 <body>
     <div class="textOutput">
         <span class="cursor"></span>
-        <textarea id="txt" oninput="mobileType(event)"></textarea>
+        <textarea id="txt"></textarea>
     </div>
 </body>
 
