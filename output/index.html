@@ -78,7 +78,7 @@
         function formatTime(timestamp) {
             const date = timestamp.toDate();
             const options = { hour: 'numeric', minute: 'numeric' };
-            return date.toLocaleTimeString(undefined, options);
+            return date.toLocaleTimeString(undefined, options).toLowerCase();
         }
 
         // Function to render the messages
