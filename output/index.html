@@ -117,7 +117,7 @@
                     messageBlock.appendChild(infoElement);
 
                     const messageElement = document.createElement('div');
-                    messageElement.textContent = message.data;
+                    messageElement.textContent = message.data.replace(/\s/g, '') == "" ? "[empty message]" : message.data;
                     messageBlock.appendChild(messageElement);
                     messagesContainer.appendChild(messageBlock);
                 });
