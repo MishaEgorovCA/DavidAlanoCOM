@@ -7,16 +7,12 @@
         body {
             letter-spacing: 0.07em;
             word-break: break-word;
-            padding: 6vw;
+            padding-left: 6vw;
             font-family: Helvetica, Arial, sans-serif;
-            /* Relative to window size */
-            font-size: 1vw;
             color: #686868;
-            /* Align text to the top left */
+            font-size: 2em;
             justify-content: flex-start;
-            /* Align text to the top left */
             align-items: flex-start;
-            /* height: 100vh; */
             margin: 0;
         }
 
@@ -39,16 +35,20 @@
 
         .date {
             margin-bottom: 0.5em;
+            cursor: pointer;
         }
 
         .info {
             margin-bottom: 0.2em;
-            font-size: 0.5vw;
+            font-size: 50%;
+        }
+
+        .deleted-info {
+            cursor: pointer;
         }
 
         .date-container {
             margin-bottom: 1em;
-            cursor: pointer;
         }
 
         .date-container.collapsed .message-block {
@@ -75,7 +75,7 @@
 <body>
     <h1>messages</h1>
 
-    <div id="messages" class="message-container"></div>
+    <div id="messages" class="message-container">fetching...</div>
 
     <script type="module">
         // Import the functions you need from the SDKs you need
@@ -173,6 +173,7 @@
                                 messageElement.style.display = 'none';
                             }
                         });
+                        infoElement.classList.add('deleted-info');
                     }
                 });
 
