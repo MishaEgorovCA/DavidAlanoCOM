@@ -102,7 +102,7 @@
         // Function to format the timestamp to a readable date
         function formatDate(timestamp) {
             const date = timestamp.toDate();
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
             return date.toLocaleDateString(undefined, options);
         }
 
