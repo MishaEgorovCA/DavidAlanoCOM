@@ -135,16 +135,12 @@
             });
 
             // Render messages by date
-            var first = true;
             Object.entries(groupedMessages).forEach(([date, messages]) => {
                 const dateContainer = document.createElement('div');
                 dateContainer.classList.add('date-container');
                 messagesContainer.appendChild(dateContainer);
-                if (first) {
-                    first = false;
-                } else {
-                    dateContainer.classList.toggle('collapsed');
-                }
+                dateContainer.classList.toggle('collapsed');
+
 
                 const dateElement = document.createElement('div');
                 dateElement.classList.add('date');
