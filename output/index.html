@@ -85,7 +85,7 @@
         }
 
         #auth input[type="password"] {
-            padding: 10px 15px;
+            padding: 10px 170px;
             font-family: Helvetica, Arial, sans-serif;
             font-size: 1rem;
             border: 2px solid #b9b9b9;
@@ -98,29 +98,12 @@
             border-color: #686868;
             outline: none;
         }
-
-        #auth button {
-            padding: 10px 20px;
-            font-size: 1rem;
-            font-family: Helvetica, Arial, sans-serif;
-            background-color: #e4e4e4;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        #auth button:hover {
-            background-color: #686868;
-        }
     </style>
 </head>
 
 <body>
     <div id="auth">
-        <input type="password" id="password" placeholder="Enter password" />
-        <button onclick="checkPassword()">Submit</button>
+        <input type="password" id="password" placeholder="" oninput="checkPassword()" />
     </div>
     <div id="main">
         <h1></h1>
