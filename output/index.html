@@ -8,7 +8,6 @@
         body {
             letter-spacing: 0.07em;
             word-break: break-word;
-            padding-left: 6vw;
             font-family: Helvetica, Arial, sans-serif;
             color: #686868;
             font-size: 1.0em;
@@ -18,10 +17,13 @@
         }
 
         h1 {
+
             font-weight: normal;
         }
 
         .message-container {
+            padding-top: 6vw;
+            padding-left: 6vw;
             margin-left: 1em;
         }
 
@@ -70,132 +72,189 @@
         .date-container.collapsed .date::before {
             transform: rotate(45deg);
         }
+
+        #main {
+            display: none;
+        }
+
+        #auth {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #auth input[type="password"] {
+            padding: 10px 15px;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 1rem;
+            border: 2px solid #b9b9b9;
+            border-radius: 5px;
+            margin-right: 10px;
+            transition: border-color 0.3s;
+        }
+
+        #auth input[type="password"]:focus {
+            border-color: #686868;
+            outline: none;
+        }
+
+        #auth button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-family: Helvetica, Arial, sans-serif;
+            background-color: #e4e4e4;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #auth button:hover {
+            background-color: #686868;
+        }
     </style>
 </head>
 
 <body>
-    <h1>messages</h1>
+    <div id="auth">
+        <input type="password" id="password" placeholder="Enter password" />
+        <button onclick="checkPassword()">Submit</button>
+    </div>
+    <div id="main">
+        <h1></h1>
 
-    <div id="messages" class="message-container">fetching...</div>
+        <div id="messages" class="message-container">fetching...</div>
 
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+            import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
 
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCZsVjv92RBNBhpC8CR5487DAVOs8RR-D0",
-            authDomain: "davidalanocom.firebaseapp.com",
-            projectId: "davidalanocom",
-            storageBucket: "davidalanocom.appspot.com",
-            messagingSenderId: "2820834762",
-            appId: "1:2820834762:web:16944cf2e5cf8876263b33"
-        };
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyCZsVjv92RBNBhpC8CR5487DAVOs8RR-D0",
+                authDomain: "davidalanocom.firebaseapp.com",
+                projectId: "davidalanocom",
+                storageBucket: "davidalanocom.appspot.com",
+                messagingSenderId: "2820834762",
+                appId: "1:2820834762:web:16944cf2e5cf8876263b33"
+            };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        var db = collection(getFirestore(app), "messages");
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            var db = collection(getFirestore(app), "messages");
 
-        // Function to format the timestamp to a readable date
-        function formatDate(timestamp) {
-            const date = timestamp.toDate();
-            const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-            const formattedDate = date.toLocaleDateString('en-CA', options);
-            return formattedDate.replace(/-/g, ' ');
-        }
+            // Function to format the timestamp to a readable date
+            function formatDate(timestamp) {
+                const date = timestamp.toDate();
+                const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+                const formattedDate = date.toLocaleDateString('en-CA', options);
+                return formattedDate.replace(/-/g, ' ');
+            }
 
-        // Function to format the timestamp to a readable time
-        function formatTime(timestamp) {
-            const date = timestamp.toDate();
-            const options = { hour: 'numeric', minute: 'numeric' };
-            return date.toLocaleTimeString(undefined, options).toLowerCase();
-        }
+            // Function to format the timestamp to a readable time
+            function formatTime(timestamp) {
+                const date = timestamp.toDate();
+                const options = { hour: 'numeric', minute: 'numeric' };
+                return date.toLocaleTimeString(undefined, options).toLowerCase();
+            }
 
-        // Function to render the messages
-        function renderMessages(messages) {
-            const messagesContainer = document.getElementById('messages');
+            // Function to render the messages
+            function renderMessages(messages) {
+                const messagesContainer = document.getElementById('messages');
 
-            // Clear previous messages
-            messagesContainer.innerHTML = '';
+                // Clear previous messages
+                messagesContainer.innerHTML = '';
 
-            // Sort messages by timestamp
-            messages.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
+                // Sort messages by timestamp
+                messages.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
 
-            // Group messages by date
-            const groupedMessages = {};
-            messages.forEach(message => {
-                const date = formatDate(message.timestamp);
-                if (!groupedMessages[date]) {
-                    groupedMessages[date] = [];
-                }
-                groupedMessages[date].push(message);
-            });
-
-            // Render messages by date
-            Object.entries(groupedMessages).forEach(([date, messages]) => {
-                const dateContainer = document.createElement('div');
-                dateContainer.classList.add('date-container');
-                messagesContainer.appendChild(dateContainer);
-                dateContainer.classList.toggle('collapsed');
-
-
-                const dateElement = document.createElement('div');
-                dateElement.classList.add('date');
-                dateElement.textContent = date.toLowerCase();
-                dateContainer.appendChild(dateElement);
-
+                // Group messages by date
+                const groupedMessages = {};
                 messages.forEach(message => {
-                    const messageBlock = document.createElement('div');
-                    messageBlock.classList.add('message-block');
-                    const infoElement = document.createElement('div');
-                    infoElement.classList.add('info');
-                    infoElement.textContent = formatTime(message.timestamp) + (message.deleted ? "  ~deleted message~" : "");
-                    messageBlock.appendChild(infoElement);
-
-                    const messageElement = document.createElement('div');
-                    messageElement.textContent = message.data.replace(/\s/g, '') == "" ? "[empty message]" : message.data;
-                    messageBlock.appendChild(messageElement);
-                    dateContainer.appendChild(messageBlock);
-
-                    if (message.deleted) {
-                        messageElement.classList.add('deleted');
-                        // Make message hidden but show on click
-                        messageElement.style.display = 'none';
-                        infoElement.addEventListener('click', () => {
-                            if (messageElement.style.display === 'none') {
-                                messageElement.style.display = 'block';
-                            } else {
-                                messageElement.style.display = 'none';
-                            }
-                        });
-                        infoElement.classList.add('deleted-info');
+                    const date = formatDate(message.timestamp);
+                    if (!groupedMessages[date]) {
+                        groupedMessages[date] = [];
                     }
+                    groupedMessages[date].push(message);
                 });
 
-                // Add click event listener to toggle collapse
-                dateElement.addEventListener('click', () => {
+                // Render messages by date
+                Object.entries(groupedMessages).forEach(([date, messages]) => {
+                    const dateContainer = document.createElement('div');
+                    dateContainer.classList.add('date-container');
+                    messagesContainer.appendChild(dateContainer);
                     dateContainer.classList.toggle('collapsed');
-                });
-            });
-        }
 
-        // Fetch messages from Firebase
-        getDocs(db).then(querySnapshot => {
-            const messages = [];
-            querySnapshot.forEach(doc => {
-                const message = {
-                    data: doc.data().data,
-                    timestamp: doc.data().timestamp,
-                    deleted: doc.data().deleted
-                };
-                messages.push(message);
+
+                    const dateElement = document.createElement('div');
+                    dateElement.classList.add('date');
+                    dateElement.textContent = date.toLowerCase();
+                    dateContainer.appendChild(dateElement);
+
+                    messages.forEach(message => {
+                        const messageBlock = document.createElement('div');
+                        messageBlock.classList.add('message-block');
+                        const infoElement = document.createElement('div');
+                        infoElement.classList.add('info');
+                        infoElement.textContent = formatTime(message.timestamp) + (message.deleted ? "  ~deleted message~" : "");
+                        messageBlock.appendChild(infoElement);
+
+                        const messageElement = document.createElement('div');
+                        messageElement.textContent = message.data.replace(/\s/g, '') == "" ? "[empty message]" : message.data;
+                        messageBlock.appendChild(messageElement);
+                        dateContainer.appendChild(messageBlock);
+
+                        if (message.deleted) {
+                            messageElement.classList.add('deleted');
+                            // Make message hidden but show on click
+                            messageElement.style.display = 'none';
+                            infoElement.addEventListener('click', () => {
+                                if (messageElement.style.display === 'none') {
+                                    messageElement.style.display = 'block';
+                                } else {
+                                    messageElement.style.display = 'none';
+                                }
+                            });
+                            infoElement.classList.add('deleted-info');
+                        }
+                    });
+
+                    // Add click event listener to toggle collapse
+                    dateElement.addEventListener('click', () => {
+                        dateContainer.classList.toggle('collapsed');
+                    });
+                });
+            }
+
+            // Fetch messages from Firebase
+            getDocs(db).then(querySnapshot => {
+                const messages = [];
+                querySnapshot.forEach(doc => {
+                    const message = {
+                        data: doc.data().data,
+                        timestamp: doc.data().timestamp,
+                        deleted: doc.data().deleted
+                    };
+                    messages.push(message);
+                });
+                renderMessages(messages);
             });
-            renderMessages(messages);
-        });
-    </script>
+        </script>
+        <script>
+            function checkPassword() {
+                const input = document.getElementById('password').value;
+                if (input[2] === 'd' && input[input.length - 3] === 'n') {
+                    document.getElementById('auth').style.display = 'none';
+                    document.getElementById('main').style.display = 'block';
+                }
+            }
+        </script>
+    </div>
 </body>
 
 </html>
