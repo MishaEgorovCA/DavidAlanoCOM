@@ -103,7 +103,8 @@
         function formatDate(timestamp) {
             const date = timestamp.toDate();
             const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-            return date.toLocaleDateString(undefined, options);
+            const formattedDate = date.toLocaleDateString('en-CA', options);
+            return formattedDate.replace(/-/g, ' ');
         }
 
         // Function to format the timestamp to a readable time
