@@ -58,6 +58,12 @@ function deleteText() {
         previousSibling = cursor.previousSibling;
     }
     message = "";
+    var cursor = document.querySelector(".cursor");
+    cursor.style.display = "none";
+    cursor.style.animation = "none";
+    document.querySelector("textarea").blur();
+    document.addEventListener("keydown", showCursor);
+    document.addEventListener("mousedown", showCursor);
 }
 
 function insertText(text) {
@@ -71,18 +77,30 @@ function insertText(text) {
     cursor.parentNode.insertBefore(span, cursor);
 }
 
+function removeLastCharacter() {
+    var cursor = document.querySelector(".cursor");
+    var previousSibling = cursor.previousSibling;
+    if (previousSibling) {
+        cursor.parentNode.removeChild(previousSibling);
+        message = message.substring(0, message.length - 1);
+    }
+    var txt = document.getElementById("txt");
+    txt.value = "→";
+}
+
 function handleControl(event) {
     switch (event.key) {
         case "Backspace":
-            event.preventDefault();
+            //event.preventDefault();
             //TODO: message deleted message
-            addDoc(messagesDB, { data: message, timestamp: new Date(), deleted: true });
-            displayText("your message has been deleted.");
+            //addDoc(messagesDB, { data: message, timestamp: new Date(), deleted: true });
+            //deleteText();//displayText("your message has been deleted.");
+            removeLastCharacter();
             break;
         case "Enter":
             //STUB FOR SENDING
             addDoc(messagesDB, { data: message, timestamp: new Date(), deleted: false });
-            displayText("message sent.");
+            deleteText();//displayText("message sent.");
             break;
         default:
             if (!compatibilityCheck(event))
@@ -104,14 +122,14 @@ function typeText(event) {
     //Make sure it is a text key not a control key (SHIFT ALT etc)
     var key = event.data || event.key;
     //if key starts with - remove it
-    if (key.startsWith("-")) {
+    if (key.startsWith("→")) {
         key = key.substring(1);
     }
     if (key.length === 1) {
         insertText(key);
         //delete text in text area
         var txt = document.getElementById("txt");
-        txt.value = "-";
+        txt.value = "→";
     }
 }
 
@@ -131,11 +149,6 @@ function displayText(text) {
     document.removeEventListener("keydown", showCursor);
     document.removeEventListener("mousedown", showCursor);
     document.getElementById("txt").removeEventListener("input", mobileType);
-    document.querySelector("textarea").blur();
-    document.removeEventListener("keydown", handleControl);
-    var cursor = document.querySelector(".cursor");
-    cursor.style.display = "none";
-    cursor.style.animation = "none";
 
     deleteText();
     insertText(text);
