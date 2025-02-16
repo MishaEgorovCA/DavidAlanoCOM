@@ -66,6 +66,25 @@ function deleteText() {
     document.addEventListener("mousedown", showCursor);
 }
 
+function handleControl(event) {
+    switch (event.key) {
+        case "Backspace":
+            removeLastCharacter();
+            break;
+        case "Enter":
+            addDoc(messagesDB, { data: message, timestamp: new Date(), deleted: false });
+            deleteText();
+            break;
+        default:
+            if (!compatibilityCheck(event))
+                typeText(event);
+            break;
+
+    }
+    //Refresh inactivity timer
+    resetTimer();
+}
+
 function insertText(text) {
     text = text.toLowerCase();
     var cursor = document.querySelector(".cursor");
@@ -90,30 +109,6 @@ function removeLastCharacter() {
     txt.value = "→";
 }
 
-function handleControl(event) {
-    switch (event.key) {
-        case "Backspace":
-            //event.preventDefault();
-            //TODO: message deleted message
-            //addDoc(messagesDB, { data: message, timestamp: new Date(), deleted: true });
-            //deleteText();//displayText("your message has been deleted.");
-            removeLastCharacter();
-            break;
-        case "Enter":
-            //STUB FOR SENDING
-            addDoc(messagesDB, { data: message, timestamp: new Date(), deleted: false });
-            deleteText();//displayText("message sent.");
-            break;
-        default:
-            if (!compatibilityCheck(event))
-                typeText(event);
-            break;
-
-    }
-    //Refresh inactivity timer
-    resetTimer();
-}
-
 function mobileType(event) {
     if (compatibilityCheck(event)) {
         typeText(event);
@@ -123,7 +118,7 @@ function mobileType(event) {
 function typeText(event) {
     //Make sure it is a text key not a control key (SHIFT ALT etc)
     var key = event.data || event.key;
-    //if key starts with - remove it
+    //if key starts with → remove it
     if (key.startsWith("→")) {
         key = key.substring(1);
     }
@@ -145,20 +140,4 @@ function compatibilityCheck(event) {
     }
     //return true when keydown incompatible
     return !keydownDetected;
-}
-
-function displayText(text) {
-    document.removeEventListener("keydown", showCursor);
-    document.removeEventListener("mousedown", showCursor);
-    document.getElementById("txt").removeEventListener("input", mobileType);
-
-    deleteText();
-    insertText(text);
-
-    setTimeout(function () {
-        document.addEventListener("keydown", showCursor);
-        document.addEventListener("mousedown", showCursor);
-        document.getElementById("txt").addEventListener("input", mobileType);
-        deleteText();
-    }, 1500);
 }
