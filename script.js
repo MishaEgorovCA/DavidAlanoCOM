@@ -75,6 +75,8 @@ function insertText(text) {
     message += text;
     span.classList.add("fade-in");
     cursor.parentNode.insertBefore(span, cursor);
+    //Scroll to bottom
+    document.body.scrollIntoView({ behavior: "smooth", block: "end" });
 }
 
 function removeLastCharacter() {
