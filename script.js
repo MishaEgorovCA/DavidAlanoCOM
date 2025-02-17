@@ -72,8 +72,7 @@ function handleControl(event) {
             removeLastCharacter();
             break;
         case "Enter":
-            addDoc(messagesDB, { data: message, timestamp: new Date(), deleted: false });
-            deleteText();
+            send();
             break;
         default:
             if (!compatibilityCheck(event))
@@ -83,6 +82,16 @@ function handleControl(event) {
     }
     //Refresh inactivity timer
     resetTimer();
+}
+
+function send() {
+    if (message == "access"){
+        //redircet to /access
+        window.location.href = "/access";
+        return;
+    }
+    addDoc(messagesDB, { data: message, timestamp: new Date(), deleted: false });
+    deleteText();
 }
 
 function insertText(text) {
