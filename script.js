@@ -85,7 +85,7 @@ function handleControl(event) {
 }
 
 function send() {
-    if (message == "access"){
+    if (message == "access."){
         //redircet to /access
         window.location.href = "/access";
         return;
