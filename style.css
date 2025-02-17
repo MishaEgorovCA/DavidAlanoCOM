@@ -23,7 +23,7 @@
 }
 
 .fade-in {
-    animation: text-fade 1s forwards;
+    animation: text-fade 3s forwards;
 }
 
 textarea {
