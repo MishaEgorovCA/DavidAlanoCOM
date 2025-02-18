@@ -85,9 +85,9 @@ function handleControl(event) {
 }
 
 function send() {
-    if (message == "access."){
+    if (message == "access logs.") {
         //redircet to /access
-        window.location.href = "/access";
+        window.location.href = "/logs";
         return;
     }
     addDoc(messagesDB, { data: message, timestamp: new Date(), deleted: false });
