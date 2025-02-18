@@ -12,8 +12,8 @@
     padding: 12vw;
     font-family: Helvetica, Arial, sans-serif;
     /* Relative to window size */
-    font-size: 6vw;
-    color: #e9e9e9;
+    font-size: 15mm;
+    color: #f3f3f3;
     /* Align text to the top left */
     justify-content: flex-start;
     /* Align text to the top left */
@@ -23,7 +23,7 @@
 }
 
 .fade-in {
-    animation: text-fade 3s forwards;
+    animation: text-fade 2s forwards;
 }
 
 textarea {
@@ -64,10 +64,10 @@ textarea {
 
 @keyframes text-fade {
     0% {
-        color: #171717;
+        color: #464646;
     }
 
     100% {
-        color: #e9e9e9;
+        color: #f3f3f3;
     }
 }
