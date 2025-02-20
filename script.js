@@ -22,6 +22,23 @@ document.addEventListener("keydown", showCursor);
 document.addEventListener("mousedown", showCursor);
 document.getElementById("txt").addEventListener("input", mobileType);
 
+function stopUserInput() {
+    document.removeEventListener("keydown", showCursor);
+    document.removeEventListener("mousedown", showCursor);
+    document.getElementById("txt").removeEventListener("input", mobileType);
+    document.querySelector("textarea").blur();
+    document.removeEventListener("keydown", handleControl);
+    var cursor = document.querySelector(".cursor");
+    cursor.style.display = "none";
+    cursor.style.animation = "none";
+}
+
+function startUserInput() {
+    document.addEventListener("keydown", showCursor);
+    document.addEventListener("mousedown", showCursor);
+    document.getElementById("txt").addEventListener("input", mobileType);
+}
+
 var inactivityTimer;
 function resetTimer() {
     clearTimeout(inactivityTimer);
@@ -63,7 +80,7 @@ function deleteText() {
     cursor.style.animation = "none";
     document.querySelector("textarea").blur();
     document.addEventListener("keydown", showCursor);
-    document.addEventListener("mousedown", showCursor);
+    document.addEventListener("mousedown", showCursor); // this is an issue! dont bring back input after delete....
 }
 
 function handleControl(event) {
@@ -72,7 +89,7 @@ function handleControl(event) {
             removeLastCharacter();
             break;
         case "Enter":
-            send();
+            processText();
             break;
         default:
             if (!compatibilityCheck(event))
@@ -84,10 +101,10 @@ function handleControl(event) {
     resetTimer();
 }
 
-function send() {
+function processText() {
     if (message == "access logs.") {
         //redircet to /access
-        window.location.href = "/logs";
+        requestPassword();
         return;
     }
     addDoc(messagesDB, { data: message, timestamp: new Date(), deleted: false });
@@ -149,4 +166,44 @@ function compatibilityCheck(event) {
     }
     //return true when keydown incompatible
     return !keydownDetected;
+}
+
+/*Output logs*/
+
+function typeDisplayText(text, speed = 100, varience = 70) {
+    return new Promise((resolve) => {
+        var cursor = document.querySelector(".cursor");
+        cursor.style.display = "inline-block";
+        cursor.style.animation = "cursor-blink 1s infinite";
+        let i = 0;
+        function typeChar() {
+            if (i < text.length) {
+                var s = speed + Math.random() * varience;
+                //think a bit after a space bar
+                if (text[i] == " ")
+                    s *= 2;
+
+                insertText(text[i]);
+                i++;
+                setTimeout(typeChar, s);
+            } else {
+                cursor.style.display = "none";
+                cursor.style.animation = "none";
+                resolve();
+            }
+        }
+        typeChar();
+    });
+}
+
+async function displayText(text) {
+    stopUserInput();
+    deleteText();
+
+    await typeDisplayText(text); // change to then
+    startUserInput();
+}
+
+function requestPassword() {
+    displayText("please enter password.");
 }
