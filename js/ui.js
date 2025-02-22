@@ -1,5 +1,5 @@
 const cursor = document.querySelector(".cursor");
-const txt = document.getElementById("txt");
+var txt = document.getElementById("txt");
 
 var inactivityTimer;
 function resetCursorTimer() {
