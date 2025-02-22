@@ -69,6 +69,7 @@ function deleteText() {
 }
 
 function mobileType(event) {
+    if (inputLocked) return;
     if (compatibilityCheck(event)) {
         typeText(event);
     }
