@@ -101,9 +101,12 @@ function compatibilityCheck(event) {
 
 /*Output logs*/
 
-function typeDisplayText(text, speed = 100, varience = 70) {
+function wait(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+function typeDisplayText(text, speed = 120, varience = 80) {
     return new Promise((resolve) => {
-        ui.showCursor();
         let i = 0;
         function typeChar() {
             if (i < text.length) {
@@ -126,9 +129,11 @@ function typeDisplayText(text, speed = 100, varience = 70) {
 async function requestPassword() {
     lockInput();
     deleteText();
+    ui.showCursor();
+    await wait(1000);
     await typeDisplayText("please enter password.");
     //wait 1.5 seconds
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await wait(1500);
     ui.hideCursor();
     deleteText();
     unlockInput();
