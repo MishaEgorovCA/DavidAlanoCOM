@@ -1,27 +1,27 @@
-import { addEntry } from "./api.js";
-import { showCursor, hideCursor, addText, removeText, deleteAllText, resetTextInput, lockTextField, unlockTextField } from "./ui.js";
+import * as api from "./api.js";
+import * as ui from "./ui.js";
 
 var message = "";
 
 var inputLocked = false;
 function lockInput() {
     inputLocked = true;
-    lockTextField();
+    ui.lockTextField();
 }
 function unlockInput() {
     inputLocked = false;
-    unlockTextField();
+    ui.unlockTextField();
 }
 
 function initializeUserInput() {
-    document.addEventListener("keydown", _showCursor);
-    document.addEventListener("mousedown", _showCursor);
+    document.addEventListener("keydown", showCursor);
+    document.addEventListener("mousedown", showCursor);
     document.getElementById("txt").addEventListener("input", mobileType);
     document.addEventListener("keydown", handleControl);
 }
 
-function _showCursor() {
-    if (!inputLocked) showCursor();
+function showCursor() {
+    if (!inputLocked) ui.showCursor();
 }
 
 function handleControl(event) {
@@ -46,26 +46,26 @@ function processText() {
         requestPassword();
         return;
     }
-    addEntry(message);
-    deleteText();
+    api.addEntry(message);
+    ui.deleteText();
 }
 
 function insertText(text) {
     text = text.toLowerCase();
     message += text;
-    addText(text);
+    ui.addText(text);
 }
 
 function removeLastCharacter() {
     if (message.length === 0) return;
     message = message.substring(0, message.length - 1);
-    removeText();
+    ui.removeText();
 }
 
 function deleteText() {
     message = "";
-    deleteAllText();
-    hideCursor();
+    ui.deleteAllText();
+    ui.hideCursor();
 }
 
 function mobileType(event) {
@@ -84,7 +84,7 @@ function typeText(event) {
     }
     if (key.length === 1) {
         insertText(key);
-        resetTextInput();
+        ui.resetTextInput();
     }
 }
 
@@ -104,7 +104,7 @@ function compatibilityCheck(event) {
 
 function typeDisplayText(text, speed = 100, varience = 70) {
     return new Promise((resolve) => {
-        showCursor();
+        ui.showCursor();
         let i = 0;
         function typeChar() {
             if (i < text.length) {
@@ -126,12 +126,12 @@ function typeDisplayText(text, speed = 100, varience = 70) {
 
 async function requestPassword() {
     lockInput();
-    deleteText();
+    ui.deleteText();
     await typeDisplayText("please enter password.");
     //wait 1.5 seconds
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    hideCursor();
-    deleteText();
+    ui.hideCursor();
+    ui.deleteText();
     unlockInput();
     //redirect to /logs
     window.location.href = "/logs";
