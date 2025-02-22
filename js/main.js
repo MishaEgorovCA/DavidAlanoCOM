@@ -1,5 +1,5 @@
 import { addEntry } from "./api.js";
-import { initializeUI, startUserInput, stopUserInput, showCursor, hideCursor } from "./ui.js";
+import { initializeUI, startUserInput, stopUserInput, showCursor, hideCursor, resetTimer } from "./ui.js";
 
 initializeUI(mobileType, handleControl);
 
@@ -42,6 +42,7 @@ function processText() {
     }
     addEntry(message);
     deleteText();
+    startUserInput();
 }
 
 function insertText(text) {

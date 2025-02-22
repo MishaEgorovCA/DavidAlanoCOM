@@ -24,7 +24,7 @@ export function startUserInput() {
 }
 
 var inactivityTimer;
-function resetTimer() {
+export function resetTimer() {
     clearTimeout(inactivityTimer);
     inactivityTimer = setTimeout(function () {
         hideCursor();
@@ -33,7 +33,7 @@ function resetTimer() {
     }, 5000);
 }
 
-function showCursor() {
+export function showCursor() {
     var cursor = document.querySelector(".cursor");
     cursor.style.display = "inline-block";
     cursor.style.animation = "cursor-blink 1s infinite";
@@ -45,7 +45,7 @@ function showCursor() {
     resetTimer();
 }
 
-function hideCursor() {
+export function hideCursor() {
     var cursor = document.querySelector(".cursor");
     cursor.style.display = "none";
     cursor.style.animation = "none";
