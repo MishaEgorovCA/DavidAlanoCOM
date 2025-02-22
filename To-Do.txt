@@ -1,0 +1,19 @@
+- instead of the rectangle. upon pressing enter (after typing "access logs.") the screen turns blank and the screen starts to type out "please enter password."
+
+- "please enter password." is typed out in average human wpm and as the typing happens, the user type function is disallowed.
+
+- user needs to wait for "please enter password." to be typed out completely and only after a 1sec delay that the user can begin typing the password
+
+ - password is hidden as dots (as with the previous) but this time you need to press enter for the log in to be accepted
+
+- if the password is incorrect, the user is directed back to the main page ( no other prompts)
+
+- scroll bug
+
+- resize bug
+
+- formalize send text to process text and command structure
+
+- press and hold on enter button for 1.5 seconds will trigger the text to fade back into initial dark grey. this is for legibility purposes in case the user wants to review the message before sending. once the enter button is released, text fades back to light grey (same light grey as previous)
+
+- enter button works as normal when pressed quickly or less that 1.5 seconds
