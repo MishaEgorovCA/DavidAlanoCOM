@@ -51,3 +51,11 @@ export function deleteAllText(){
 export function resetTextInput() {
     txt.value = "→";
 }
+
+export function lockTextField() {
+    txt.disabled = true;
+}
+
+export function unlockTextField() {
+    txt.disabled = false;
+}

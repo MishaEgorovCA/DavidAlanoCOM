@@ -1,14 +1,16 @@
 import { addEntry } from "./api.js";
-import { showCursor, hideCursor, addText, removeText, deleteAllText, resetTextInput } from "./ui.js";
+import { showCursor, hideCursor, addText, removeText, deleteAllText, resetTextInput, lockTextField, unlockTextField } from "./ui.js";
 
 var message = "";
 
 var inputLocked = false;
 function lockInput() {
     inputLocked = true;
+    lockTextField();
 }
 function unlockInput() {
     inputLocked = false;
+    unlockTextField();
 }
 
 function initializeUserInput() {
