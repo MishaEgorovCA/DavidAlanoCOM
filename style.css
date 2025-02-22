@@ -1,3 +1,21 @@
+@font-face {
+    font-family: 'Helvetica Neue';
+    src: 
+        url('/fonts/HelveticaNeueMedium.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Helvetica Neue Light';
+    src: 
+        url('/fonts/HelveticaNeueLight.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Helvetica Neue Thin';
+    src: 
+        url('/fonts/HelveticaNeueThin.otf') format('opentype');
+}
+
 .cursor {
     display: none;
     width: 2px;
@@ -10,7 +28,7 @@
     letter-spacing: 0.07em;
     word-break: break-word;
     padding: 12vw;
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: 'Helvetica Neue Light';
     /* Relative to window size */
     font-size: 15mm;
     color: #f3f3f3;

@@ -9,6 +9,31 @@
 </head>
 
 <body>
+    <button 
+        id="fontToggleBtn" 
+        style="position: fixed; top: 10px; right: 10px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; z-index: 1000;"
+    >
+        Helvetica Neue Light
+    </button>
+
+    <script>
+        const fonts = [
+            { name: 'Helvetica Neue', weight: 400 },
+            { name: 'Helvetica Neue Light', weight: 300 },
+            { name: 'Helvetica Neue Thin', weight: 100 }
+        ];
+
+        let currentFontIndex = 1; // Start with 'Helvetica Neue Light'
+
+        document.getElementById('fontToggleBtn').addEventListener('click', () => {
+            currentFontIndex = (currentFontIndex + 1) % fonts.length;
+            const currentFont = fonts[currentFontIndex];
+
+            // Change body font and button text
+            document.querySelector('.textOutput').style.fontFamily = currentFont.name;
+            document.getElementById('fontToggleBtn').innerText = currentFont.name;
+        });
+    </script>
     <div class="textOutput">
         <span class="cursor" id="cursor"></span>
         <textarea id="txt"></textarea>
