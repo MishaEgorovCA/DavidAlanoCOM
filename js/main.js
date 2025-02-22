@@ -130,9 +130,8 @@ async function requestPassword() {
     lockInput();
     deleteText();
     ui.showCursor();
-    await wait(1000);
+    await wait(3000);
     await typeDisplayText("please enter password.");
-    //wait 1.5 seconds
     await wait(1500);
     ui.hideCursor();
     deleteText();
