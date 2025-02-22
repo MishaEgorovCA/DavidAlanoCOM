@@ -1,22 +1,29 @@
 import { addEntry } from "./api.js";
-import { initializeUI, startUserInput, stopUserInput, showCursor, hideCursor, resetTimer } from "./ui.js";
-
-initializeUI(mobileType, handleControl);
+import { showCursor, hideCursor, addText, removeText, deleteAllText, resetTextInput } from "./ui.js";
 
 var message = "";
-function deleteText() {
-    var cursor = document.getElementById("cursor");
-    var previousSibling = cursor.previousSibling;
-    //Delete all the text up until the cursor
-    while (previousSibling) {
-        cursor.parentNode.removeChild(previousSibling);
-        previousSibling = cursor.previousSibling;
-    }
-    message = "";
-    hideCursor();
+
+var inputLocked = false;
+function lockInput() {
+    inputLocked = true;
+}
+function unlockInput() {
+    inputLocked = false;
+}
+
+function initializeUserInput() {
+    document.addEventListener("keydown", _showCursor);
+    document.addEventListener("mousedown", _showCursor);
+    document.getElementById("txt").addEventListener("input", mobileType);
+    document.addEventListener("keydown", handleControl);
+}
+
+function _showCursor() {
+    if (!inputLocked) showCursor();
 }
 
 function handleControl(event) {
+    if (inputLocked) return;
     switch (event.key) {
         case "Backspace":
             removeLastCharacter();
@@ -30,43 +37,33 @@ function handleControl(event) {
             break;
 
     }
-    //Refresh inactivity timer
-    resetTimer();
 }
 
 function processText() {
     if (message == "access logs.") {
-        //redircet to /access
         requestPassword();
         return;
     }
     addEntry(message);
     deleteText();
-    startUserInput();
 }
 
 function insertText(text) {
     text = text.toLowerCase();
-    var cursor = document.getElementById("cursor");
-    var textNode = document.createTextNode(text);
-    var span = document.createElement("span");
-    span.appendChild(textNode);
     message += text;
-    span.classList.add("fade-in");
-    cursor.parentNode.insertBefore(span, cursor);
-    //Scroll to bottom
-    document.body.scrollIntoView({ behavior: "smooth", block: "end" });
+    addText(text);
 }
 
 function removeLastCharacter() {
-    var cursor = document.getElementById("cursor");
-    var previousSibling = cursor.previousSibling;
-    if (previousSibling) {
-        cursor.parentNode.removeChild(previousSibling);
-        message = message.substring(0, message.length - 1);
-    }
-    var txt = document.getElementById("txt");
-    txt.value = "→";
+    if (message.length === 0) return;
+    message = message.substring(0, message.length - 1);
+    removeText();
+}
+
+function deleteText() {
+    message = "";
+    deleteAllText();
+    hideCursor();
 }
 
 function mobileType(event) {
@@ -84,9 +81,7 @@ function typeText(event) {
     }
     if (key.length === 1) {
         insertText(key);
-        //delete text in text area
-        var txt = document.getElementById("txt");
-        txt.value = "→";
+        resetTextInput();
     }
 }
 
@@ -119,7 +114,6 @@ function typeDisplayText(text, speed = 100, varience = 70) {
                 i++;
                 setTimeout(typeChar, s);
             } else {
-                hideCursor();
                 resolve();
             }
         }
@@ -127,14 +121,18 @@ function typeDisplayText(text, speed = 100, varience = 70) {
     });
 }
 
-async function displayText(text) {
-    stopUserInput();
+async function requestPassword() {
+    lockInput();
     deleteText();
-
-    await typeDisplayText(text); // change to then
-    startUserInput();
+    await typeDisplayText("please enter password.");
+    //wait 1.5 seconds
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    hideCursor();
+    deleteText();
+    unlockInput();
+    //redirect to /logs
+    window.location.href = "/logs";
 }
 
-function requestPassword() {
-    displayText("please enter password.");
-}
+
+initializeUserInput();

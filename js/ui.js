@@ -1,53 +1,53 @@
-var mobileType;
-var handleControl;
-
-export function initializeUI(mT, hC) {
-    mobileType = mT;
-    handleControl = hC;
-    document.addEventListener("keydown", showCursor);
-    document.addEventListener("mousedown", showCursor);
-    document.getElementById("txt").addEventListener("input", mobileType);
-}
-
-export function stopUserInput() {
-    document.removeEventListener("keydown", showCursor);
-    document.removeEventListener("mousedown", showCursor);
-    document.getElementById("txt").removeEventListener("input", mobileType);
-    document.removeEventListener("keydown", handleControl);
-    hideCursor();
-}
-
-export function startUserInput() {
-    document.addEventListener("keydown", showCursor);
-    document.addEventListener("mousedown", showCursor);
-    document.getElementById("txt").addEventListener("input", mobileType);
-}
+const cursor = document.querySelector(".cursor");
+const txt = document.getElementById("txt");
 
 var inactivityTimer;
-export function resetTimer() {
+function resetCursorTimer() {
     clearTimeout(inactivityTimer);
     inactivityTimer = setTimeout(function () {
         hideCursor();
-        document.addEventListener("keydown", showCursor);
-        document.addEventListener("mousedown", showCursor);
     }, 5000);
 }
 
 export function showCursor() {
-    var cursor = document.querySelector(".cursor");
     cursor.style.display = "inline-block";
     cursor.style.animation = "cursor-blink 1s infinite";
-    document.addEventListener("keydown", handleControl);
-    //remove event listeners
-    document.removeEventListener("keydown", showCursor);
-    document.removeEventListener("mousedown", showCursor);
-
-    resetTimer();
+    resetCursorTimer();
 }
 
 export function hideCursor() {
-    var cursor = document.querySelector(".cursor");
     cursor.style.display = "none";
     cursor.style.animation = "none";
     document.querySelector("textarea").blur();
+}
+
+export function addText(text) {
+    var textNode = document.createTextNode(text);
+    var span = document.createElement("span");
+    span.appendChild(textNode);
+    span.classList.add("fade-in");
+    cursor.parentNode.insertBefore(span, cursor);
+    //Scroll to bottom
+    document.body.scrollIntoView({ behavior: "smooth", block: "end" });
+}
+
+export function removeText() {
+    var previousSibling = cursor.previousSibling;
+    if (previousSibling) {
+        cursor.parentNode.removeChild(previousSibling);
+    }
+    resetTextInput();
+}
+
+export function deleteAllText(){
+    var previousSibling = cursor.previousSibling;
+    //Delete all the text up until the cursor
+    while (previousSibling) {
+        cursor.parentNode.removeChild(previousSibling);
+        previousSibling = cursor.previousSibling;
+    }
+}
+
+export function resetTextInput() {
+    txt.value = "→";
 }
