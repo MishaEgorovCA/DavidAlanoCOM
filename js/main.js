@@ -37,7 +37,6 @@ function handleControl(event) {
             if (!compatibilityCheck(event))
                 typeText(event);
             break;
-
     }
 }
 
@@ -47,7 +46,7 @@ function processText() {
         return;
     }
     api.addEntry(message);
-    ui.deleteText();
+    deleteText();
 }
 
 function insertText(text) {
@@ -126,12 +125,12 @@ function typeDisplayText(text, speed = 100, varience = 70) {
 
 async function requestPassword() {
     lockInput();
-    ui.deleteText();
+    deleteText();
     await typeDisplayText("please enter password.");
     //wait 1.5 seconds
     await new Promise((resolve) => setTimeout(resolve, 1500));
     ui.hideCursor();
-    ui.deleteText();
+    deleteText();
     unlockInput();
     //redirect to /logs
     window.location.href = "/logs";
