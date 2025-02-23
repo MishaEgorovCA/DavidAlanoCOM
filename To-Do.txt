@@ -19,3 +19,5 @@
 - enter button works as normal when pressed quickly or less that 1.5 seconds
 
 - change the mobile user input to instead use a content editable div for better mobile interaction (using focus() onclick)
+
+- authenticate through firebase
