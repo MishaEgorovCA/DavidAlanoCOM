@@ -1,19 +1,7 @@
 @font-face {
-    font-family: 'Helvetica Neue';
-    src: 
-        url('/fonts/HelveticaNeueMedium.otf') format('opentype');
-}
-
-@font-face {
     font-family: 'Helvetica Neue Light';
     src: 
         url('/fonts/HelveticaNeueLight.otf') format('opentype');
-}
-
-@font-face {
-    font-family: 'Helvetica Neue Thin';
-    src: 
-        url('/fonts/HelveticaNeueThin.otf') format('opentype');
 }
 
 .cursor {
@@ -28,9 +16,9 @@
     letter-spacing: 0.07em;
     word-break: break-word;
     padding: 12vw;
-    font-family: 'Helvetica Neue Light';
+    font-family: 'Helvetica Neue Light', Arial, Helvetica, sans-serif;
     /* Relative to window size */
-    font-size: 15mm;
+    font-size: 5mm;
     color: #f3f3f3;
     /* Align text to the top left */
     justify-content: flex-start;
