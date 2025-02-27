@@ -46,11 +46,10 @@ export function deleteAllText() {
         cursor.parentNode.removeChild(previousSibling);
         previousSibling = cursor.previousSibling;
     }
-    txt.value = "";
 }
 
 export function resetTextInput() {
-    return;//txt.value = "→";
+    txt.value = "→";
 }
 
 export function lockTextField() {

@@ -75,16 +75,15 @@ function mobileType(event) {
 }
 
 function typeText(event) {
-    //Make sure it is a text key not a control key (SHIFT ALT etc)
     var key = event.data || event.key;
     //if key starts with → remove it
     if (key.startsWith("→")) {
         key = key.substring(1);
     }
-    if (key.length === 1) {
-        insertText(key);
-        ui.resetTextInput();
-    }
+    //if (key.length === 1) {
+    insertText(key[key.length - 1]);
+    ui.resetTextInput();
+    //}
 }
 
 var keydownDetected = false;
