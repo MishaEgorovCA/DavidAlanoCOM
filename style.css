@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Helvetica Neue Light';
-    src: 
+    src:
         url('/fonts/HelveticaNeueLight.otf') format('opentype');
 }
 
@@ -42,6 +42,7 @@ textarea {
     align-items: inherit;
     background-color: transparent;
     outline: none;
+    caret-color: transparent;
 
     position: fixed;
     bottom: 0;
