@@ -39,17 +39,18 @@ export function removeText() {
     resetTextInput();
 }
 
-export function deleteAllText(){
+export function deleteAllText() {
     var previousSibling = cursor.previousSibling;
     //Delete all the text up until the cursor
     while (previousSibling) {
         cursor.parentNode.removeChild(previousSibling);
         previousSibling = cursor.previousSibling;
     }
+    txt.value = "";
 }
 
 export function resetTextInput() {
-    txt.value = "→";
+    return;//txt.value = "→";
 }
 
 export function lockTextField() {
