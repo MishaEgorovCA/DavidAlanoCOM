@@ -35,7 +35,7 @@
 textarea {
     /*inherit font and alignements from textOutput*/
     font-family: inherit;
-    font-size: inherit;
+    font-size: 160px;
     padding: inherit;
     margin: 0;
     justify-content: inherit;
