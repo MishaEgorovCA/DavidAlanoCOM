@@ -21,3 +21,7 @@
 - change the mobile user input to instead use a content editable div for better mobile interaction (using focus() onclick)
 
 - authenticate through firebase
+
+- cursor cursor.style.visibility = "hidden"; and cursor.style.visibility = "visible"; to remove jitter
+
+- style of txt to hide cursor on mobile
