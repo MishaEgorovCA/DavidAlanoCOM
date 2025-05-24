@@ -18,7 +18,7 @@
     padding: 12vw;
     font-family: 'Helvetica Neue Light', Helvetica, Arial, sans-serif;
     /* Relative to window size */
-    font-size: 5mm;
+    font-size: 25mm;
     color: #f3f3f3;
     /* Align text to the top left */
     justify-content: flex-start;
@@ -70,11 +70,11 @@ textarea {
 }
 
 @keyframes text-fade {
-    0% {
+    100% {
         color: #464646;
     }
 
-    100% {
+    0% {
         color: #f3f3f3;
     }
 }
